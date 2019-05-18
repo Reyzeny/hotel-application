@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('showhome');
 Route::resource('/room_type', 'RoomTypeController');
 Route::get('/vue/{vue_capture?}', function () {
     return view('vue');

@@ -21,7 +21,7 @@ New Room Type
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST", action="/room_type">
+        <form method="POST", action="/room_type" enctype="multipart/form-data">
             @csrf
             <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Name"/><br>
             @error('name')
@@ -29,6 +29,20 @@ New Room Type
             @enderror
             <input type="text" id="price" name="price" class="form-control" placeholder="Price"/><br>
             <input type="text" name="features" class="form-control" placeholder="Features"/><br>
+            <div class="input-group control-group increment" >
+                <input type="file" name="filename[]" class="form-control">
+                <div class="input-group-btn"> 
+                    <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
+                </div>
+            </div>
+            <div class="clone hide">
+                <div class="control-group input-group" style="margin-top:10px">
+                    <input type="file" name="filename[]" class="form-control">
+                    <div class="input-group-btn"> 
+                    <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
+                    </div>
+                </div>
+            </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -97,8 +111,6 @@ New Room Type
                 </div>
             </div>
             </div>
-
-
         </div>
         
         
@@ -107,9 +119,20 @@ New Room Type
     
 </div>
 @endsection
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 <script>
-function editRoomInfo() {
-    
-}
+
+    $(document).ready(function() {
+
+      $(".btn-success").click(function(){ 
+          var html = $(".clone").html();
+          $(".increment").after(html);
+      });
+
+      $("body").on("click",".btn-danger",function(){ 
+          $(this).parents(".control-group").remove();
+      });
+
+    });
+
 </script>

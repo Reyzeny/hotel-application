@@ -16,6 +16,7 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import App from './App.vue'
+import VueUploadMultipleImage from 'vue-upload-multiple-image'
  
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
@@ -35,6 +36,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('header-component', require('./components/HeaderComponent.vue').default);
 Vue.component('main-page', require('./components/MainPage.vue').default);
 Vue.component('room-listing-component', require('./components/RoomListingComponent.vue').default);
+Vue.component('image-upload', require(VueUploadMultipleImage).default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

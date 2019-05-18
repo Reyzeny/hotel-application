@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/pelumi', function(Request $request) {
     return "hello world";
 });
+Route::get('/rooms', 'RoomTypeController@showRoomListing');
+Route::get('/rooms/{id}', 'RoomTypeController@showRoomListing');
