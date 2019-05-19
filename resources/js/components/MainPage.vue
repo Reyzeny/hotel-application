@@ -107,7 +107,7 @@ export default {
 .landing-wrapper {
   width: 100%;
   height: 100vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/landing-page-hotel.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/hotel-bg.jpg');
 }
 
 

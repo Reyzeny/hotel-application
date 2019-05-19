@@ -11,14 +11,15 @@
 |
 */
 
+
+// Route::get('/app/{vue_capture?}', function () {
+//     return view('vue');
+//    })->where('vue_capture', '[\/\w\.-]*');
+
 Route::get('/', function () {
-    return view('welcome');
-})->middleware('showhome');
-Route::resource('/room_type', 'RoomTypeController');
-Route::get('/vue/{vue_capture?}', function () {
     return view('vue');
-   })->where('vue_capture', '[\/\w\.-]*');
+});
 
-Auth::routes();
-
+Route::resource('/room_type', 'RoomTypeController');
 Route::get('/admin', 'HomeController@index')->name('home');
+Auth::routes();
