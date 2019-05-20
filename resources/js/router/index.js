@@ -4,6 +4,7 @@ import MainPage from '../components/MainPage'
 import ExampleComponent from '../components/ExampleComponent'
 import RoomListingComponent from '../components/RoomListingComponent'
 import RoomInfoComponent from '../components/RoomInfo'
+import Login from '../components/Login'
 
 Vue.use(VueRouter)
 
@@ -19,6 +20,10 @@ const routes = [
     {
         path: '/rooms/:id',
         component: RoomInfoComponent
+    },
+    {
+        path: '/userlogin',
+        component: Login
     }
 ]
 
