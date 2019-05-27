@@ -1,23 +1,37 @@
 <template>
-<div class="header">
-    <router-link to="/">
-        <h4>Hotel</h4>
-    </router-link> 
-    <nav>
-        <div v-if="loggedIn" :class="barClass">
-            <ul>
-                 <li>Account</li>   <!-- , logout -->
-               
-                <li><router-link to="/">Bookings</router-link></li>
-                <li><a href="javascript:void(0);" onclick="myfunction()"><i class="fa fa-bars"></i></a></li>
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light header">
+        <a class="navbar-brand" href="#">
+            <img src="/images/hotel-logo" width="30" height="30" alt="Hotel" class="nav-text-color">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon">
+                <img src="/images/menu.svg" width="30" height="30"/>
+            </span>
+        </button>
+
+        <div v-if="loggedIn" class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <router-link class="nav-link nav-text-color" to="/useraccount">Account</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-link nav-text-color" to="/bookings">Bookings</router-link>
+                </li>
             </ul>
         </div>
-        <div v-else  :class="barClass">
-            <ul>
-                <li><router-link to="/">Login</router-link></li>
-                <li><router-link to="/">Signup</router-link></li>
-                <li><router-link to="/">Bookings</router-link></li>
-                <li><a href="javascript:void(0);" :click="myfunction"><i class="fa fa-bars"></i></a></li>
+
+        <div v-else class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <router-link class="nav-link nav-text-color" to="/userlogin">Login</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-link nav-text-color" to="/usersignup">Signup</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-link nav-text-color" to="/bookings">Bookings</router-link>
+                </li>
             </ul>
         </div>
     </nav>
@@ -26,9 +40,13 @@
 
 <script>
 export default {
+    computed: {
+        loggedIn() {
+            return localStorage.getItem('authToken')!=null
+        }
+    },
     data () {
         return {
-            loggedIn: false,
             barClass: "topnav",
         }
     },
@@ -46,11 +64,10 @@ export default {
 
 <style lang="scss" scoped>
 *{
-    font-family: 'Circular-Book'
+    font-family: serif;
 }
-.header {
-    display: flex;
-    flex-direction: row;
+.nav-text-color {
+    color: white !important;
 }
 .header-body {
     position: absolute;
@@ -63,10 +80,9 @@ export default {
 }
 .topnav ul {
     list-style-type: none;
-    float: right; 
 }
 .topnav ul>li {
-    display: inline;
+    display: inline
 }
 
 @media screen and (max-width: 600px) {

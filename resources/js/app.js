@@ -15,11 +15,19 @@ import store from './store'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import App from './App.vue'
+//import App from './App.vue'
+import jspdf from 'jspdf'
+import VueTyperPlugin from 'vue-typer'
+import VeeValidate from 'vee-validate';
+
+
 //import VueUploadMultipleImage from 'vue-upload-multiple-image'
  
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
+Vue.use(jspdf)
+Vue.use(VueTyperPlugin)
+Vue.use(VeeValidate);
 
 /**
  * The following block of code may be used to automatically register your

@@ -1,18 +1,27 @@
 <template>
     <div class="landing-wrapper">   <!--parent div-->
         <header-component/>
-        <section>
-            <div>   <!-- vue typer-->
-
+        <section class="container">
+            <div class="row">
+                <div class="header">   <!-- vue typer-->
+                    <vue-typer :text='["Welcome to Rakitich Hotel!", "Our goal is to serve you better!"]'></vue-typer>
+                </div>
             </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <p class="header-sub-text">We deliver the best hotel services you can think of. We have affordable rooms stocked with various utitlites
+                    we know you will need.
+                    Our customer service is also available 24/7
+                    </p>
+                </div>
+            </div>
+            
     
-            <router-link to="/rooms">
-             <div class="btn-book">   <!-- book now button -->
-                
-                    Book A Room
-                
-            </div>
-            </router-link>
+           
+                <button class="btn btn-success btn-block btn-book" @click="showRoomListing()">   <!-- book now button -->
+                        Book A Room
+                </button>
+           
         </section>
     </div>
 </template>
@@ -46,11 +55,33 @@ export default {
         console.log(this.store);
         //this.axios.get('/api/pelumi').then(res=>{ console.log("result is ", res)});
         
+    },
+    methods: {
+        showRoomListing() {
+            this.$router.push('/rooms')
+        }
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.header {
+    margin-top: 30px;
+}
+.vue-typer {
+    font-size: 70px; 
+    font-weight: 700; 
+    .custom.char {
+        &.typed {
+             color:#00E676 !important;
+        }
+    } 
+}
+.header-sub-text {
+    color: white;
+    font-size: 30px;
+}
+
 .image-container {
   
   
@@ -113,12 +144,10 @@ export default {
 
 
 .btn-book {
-    width: 50%;
-    color: white;
-    margin: 0 auto;
-    text-align: center;
-    border-width: 2px;
-    background-color: #00E676;
+   margin-top: 50px;
+   height: 10vh; 
+   font-size: 30px;
+   font-weight: 300;
 }
 
 </style>

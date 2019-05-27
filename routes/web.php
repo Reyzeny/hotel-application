@@ -21,5 +21,6 @@ Route::get('/', function () {
 });
 
 Route::resource('/room_type', 'RoomTypeController');
+Route::resource('/room', 'RoomController');
 Route::get('/admin', 'HomeController@index')->name('home');
 Auth::routes();

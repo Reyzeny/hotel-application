@@ -5,6 +5,8 @@ import ExampleComponent from '../components/ExampleComponent'
 import RoomListingComponent from '../components/RoomListingComponent'
 import RoomInfoComponent from '../components/RoomInfo'
 import Login from '../components/Login'
+import BookingListings from '../components/BookingListings'
+import Signup from '../components/Signup'
 
 Vue.use(VueRouter)
 
@@ -24,6 +26,14 @@ const routes = [
     {
         path: '/userlogin',
         component: Login
+    },
+    {
+        path: '/usersignup',
+        component: Signup
+    },
+    {
+        path: '/bookings',
+        component: BookingListings
     }
 ]
 

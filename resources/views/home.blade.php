@@ -101,7 +101,7 @@ New Room Type
                         @enderror
                         <input type="hidden" name="room_type_id"  value="{{ $room_type->id }}"/>
                         <label>Available</label>
-                        <input type="text" name="available" value="1"/>
+                        <input type="hidden" name="available" value="0"/>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary">Save</button>
