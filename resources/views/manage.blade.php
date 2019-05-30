@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<h1>Manage Rooms</h1>
 <section id="tabs" class="project-tab">
     <div class="container">
         <div class="row">
@@ -55,11 +56,11 @@
                         @endforeach
                     </div>
                     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                        @foreach($available in $availableList)
+                        @foreach($availableList as $available)
                         <div class="card">
 
                             <h4>{{$available->room_type->name}}</h4>
-                            <h3>{{$available->}}</h3>
+                           
                             <form action="/reservation/{{$due->id}}" method="POST">
                                 @csrf
                                 @method('DELETE')
