@@ -43,23 +43,41 @@ class ReservationController extends Controller
         //
         
         $room_type_id = $request->room_type_id;
-        $room = Room::where([
+        $room_type_count = Room::where([
+            ['room_type_id', $room_type_id],
+            ['available', true]
+            ])->get()->count();
+        if ($room_type_count < $request->no_of_rooms) {
+            return response()->json(['msg'=>'limited room'], 400);
+        }
+        
+        $booking = new Booking();
+        $booking->customer_id = $request->customer_id;
+        $booking->room_type_id = $request->room_type_id;
+        $booking->no_of_rooms = $request->no_of_rooms;
+        $booking->no_of_persons = $request->no_of_persons;
+        $booking->amount = $request->amount;
+        $booking->transaction_ref = $request->transaction_ref;
+        $booking->check_in_date = $request->check_in_date;
+        $booking->check_out_date = $request->check_out_date;
+        $booking->save();
+
+        
+        for ($i=0; $i<$request->noOfRooms; $i++){
+            $room = Room::where([
                 ['room_type_id', $room_type_id],
                 ['available', true]
             ])->inRandomOrder()->first();
-        $room->available = false;
-        $room->save();
+            $room->available = false;
+            $room->save();
 
-        $booking = new Booking();
-        $booking->customer_id = $request->customer_id;
-        $booking->room_number = $room->number;
-        $booking->noOfRooms = $request->noOfRooms;
-        $booking->noOfPersons = $request->noOfPersons;
-        $booking->amount = $request->price;
-        $booking->transactionRef = $request->transactionRef;
+            $booking_rooms = new BookingRoom();
+            $booking_rooms->booking_id = $booking->id;
+            $booking_rooms->room_number = $room->number;
+            $booking_rooms->save();
+        }
 
-        $booking->save();
-        return $room;
+        return response()->json(['booking'=>$booking]);
 
     }
 
@@ -118,5 +136,22 @@ class ReservationController extends Controller
             $room->save();
         }
         return redirect()->back();
+    }
+
+    public function getuserbookings($user_id) {
+        $recentbookings = Booking::where([
+            ['customer_id', $user_id],
+            ['checked_out', false]
+        ])->get()->load('room_type')->load('customer');
+        $pastbookings = $this->getpastuserbookings($user_id);
+        return ['recent'=>$recentbookings, 'past'=>$pastbookings];
+    }
+
+    public function getpastuserbookings($user_id) {
+        $pastbookings = Booking::where([
+            ['customer_id', $user_id],
+            ['checked_out', true]
+        ])->get()->load('room_type')->load('customer');
+        return $pastbookings;
     }
 }

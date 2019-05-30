@@ -18,6 +18,8 @@
                             <span class="sr-only">Loading...</span>
                             Register
                         </b-button>
+                        <div v-if="showMatchingError" style="color: red;">Passwords do not match</div>
+                        <div v-if="showEmailExists" style="color: red;">Email already exists</div>
                     </b-form>
                 </b-card>
              </b-col>
@@ -41,10 +43,18 @@ export default {
             password: '',
             confirmPassword: '',
             showLoading: false,
+            showMatchingError: false,
+            showEmailExists: false,
         }
     },
     methods: {
         register() {
+            this.showEmailExists = false;
+            this.showMatchingError = false;
+            if (this.password!=this.confirmPassword) {
+                this.showMatchingError = true;
+                return;
+            }
            this.$validator.validate().then(valid => {
                 if (!valid){
                     return;
@@ -70,7 +80,11 @@ export default {
                     }
                 })
                 .catch(error=>{
+                    this.showLoading = false;
+                    this.showMatchingError = false;
+                    this.showEmailExists = true;
                     console.log("error is ", error);
+
                 })
             });
         }

@@ -19,6 +19,7 @@ import VueAxios from 'vue-axios'
 import jspdf from 'jspdf'
 import VueTyperPlugin from 'vue-typer'
 import VeeValidate from 'vee-validate';
+import moment from 'moment'
 
 
 //import VueUploadMultipleImage from 'vue-upload-multiple-image'
@@ -28,6 +29,7 @@ Vue.use(BootstrapVue)
 Vue.use(jspdf)
 Vue.use(VueTyperPlugin)
 Vue.use(VeeValidate);
+Vue.use(moment);
 
 /**
  * The following block of code may be used to automatically register your
@@ -45,6 +47,7 @@ Vue.component('header-component', require('./components/HeaderComponent.vue').de
 Vue.component('main-page', require('./components/MainPage.vue').default);
 Vue.component('room-listing-component', require('./components/RoomListingComponent.vue').default);
 Vue.component('room-info-component', require('./components/RoomInfo.vue').default);
+Vue.component('receipt-component', require('./components/ReceiptComponent.vue').default);
 //Vue.component('image-upload', require(VueUploadMultipleImage).default);
 
 /**

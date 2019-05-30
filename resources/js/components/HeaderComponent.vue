@@ -2,7 +2,7 @@
 <div>
     <nav class="navbar navbar-expand-lg navbar-light header">
         <a class="navbar-brand" href="#">
-            <img src="/images/hotel-logo" width="30" height="30" alt="Hotel" class="nav-text-color">
+            <img src="/images/hotel-logo.png" width="30" height="30" alt="Owu Crown Hotel" class="nav-text-color">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon">
@@ -12,14 +12,19 @@
 
         <div v-if="loggedIn" class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item-dropdown">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle nav-text-color" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Account
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <router-link to="/useraccount" class="dropdown-item" href="#">Bookings</router-link>
-                        <router-link to="/logout" class="dropdown-item" href="#">Logout</router-link>
+                        <b-button @click="logout()" class="dropdown-item">Logout</b-button>
                     </div>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-link nav-text-color" to="/bookings">
+                        Bookings
+                    </router-link>
                 </li>
             </ul>
         </div>
@@ -51,12 +56,14 @@ export default {
         }
     },
     methods: {
-        myfunction() {
-            if (barClass==='topnav') {
-                barClass += ' responsive'
-            }else{
-                barClass = 'topnav'
-            }
+        logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('customerID');
+            localStorage.removeItem('first_name');
+            localStorage.removeItem('last_name');
+            // this.created();
+            // this.$forceUpdate();
+            this.$router.go();
         }
     }
 }
@@ -67,7 +74,7 @@ export default {
     font-family: serif;
 }
 .nav-text-color {
-    color: white !important;
+    color: greenyellow !important;
 }
 .header-body {
     position: absolute;

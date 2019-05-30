@@ -22,5 +22,6 @@ Route::get('/pelumi', function(Request $request) {
 Route::post('/signup', 'SignupController@store');
 Route::post('/login', 'LoginController@store');
 Route::get('/rooms', 'RoomTypeController@showRoomListing');
-Route::get('/rooms/{id}', 'RoomTypeController@showRoomListing');
+Route::get('/rooms/{id}', 'RoomTypeController@show');
 Route::resource('/reservation', 'ReservationController');
+Route::get('/bookings/{user_id}', 'ReservationController@getuserbookings');

@@ -23,6 +23,7 @@ class CreateBookingsTable extends Migration
             $table->string('transaction_ref');
             $table->date('check_in_date');
             $table->date('check_out_date');
+            $table->boolean('checked_in')->default(false);
             $table->boolean('checked_out')->default(false);
             $table->timestamps();
         });

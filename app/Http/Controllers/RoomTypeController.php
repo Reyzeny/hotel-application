@@ -80,6 +80,8 @@ class RoomTypeController extends Controller
     public function show($id)
     {
         //
+        $room_type = RoomType::find($id);
+        return $room_type->load('images');
     }
 
     /**

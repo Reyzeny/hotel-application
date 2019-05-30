@@ -3,9 +3,8 @@
         <b-row class="center-form">
             <b-col md="3"/>
              <b-col md="6">
-                 <b-card title="COWU CROWN HOTEL">
+                 <b-card title="OWU CROWN HOTEL">
                     <b-form>
-                       
                         <h4 class="register">Login</h4><br>
                         <b-form-input v-model="email" type="text" placeholder="Email" name="email" v-validate="'required|email'"/><span class="error">{{ errors.first('email') }}</span><br>
                         <b-form-input v-model="password" type="password" placeholder="Password" name="password" v-validate="'required|min:6'" data-vv-as="Password"/><span class="error">{{ errors.first('password') }}</span><br>
@@ -14,6 +13,7 @@
                             <span class="sr-only">Loading...</span>
                             Login
                         </b-button>
+                        <div v-if="showLoginError" style="color: red;">Email or Password Incorrect</div>
                     </b-form>
                 </b-card>
              </b-col>
@@ -33,10 +33,12 @@ export default {
             email: '',
             password: '',
             showLoading: false,
+            showLoginError: false,
         }
     },
     methods: {
         login() {
+            this.showLoginError = false;
            this.$validator.validate().then(valid => {
                 if (!valid){
                     return;
@@ -60,6 +62,8 @@ export default {
                 })
                 .catch(error=>{
                     console.log("error is ", error);
+                    this.showLoading = false;
+                    this.showLoginError = true;
                 })
             });
         }
