@@ -47,9 +47,12 @@ class ReservationController extends Controller
             ['room_type_id', $room_type_id],
             ['available', true]
             ])->get()->count();
+        
         if ($room_type_count < $request->no_of_rooms) {
             return response()->json(['msg'=>'limited room'], 400);
         }
+        //return ['ms'=>"count is $room_type_count"];
+        
         
         $booking = new Booking();
         $booking->customer_id = $request->customer_id;
@@ -63,7 +66,7 @@ class ReservationController extends Controller
         $booking->save();
 
         
-        for ($i=0; $i<$request->noOfRooms; $i++){
+        for ($i=0; $i<$request->no_of_rooms; $i++){
             $room = Room::where([
                 ['room_type_id', $room_type_id],
                 ['available', true]
