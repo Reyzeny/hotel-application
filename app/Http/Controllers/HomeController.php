@@ -29,7 +29,7 @@ class HomeController extends Controller
         // foreach($room_types as $room_type){
         //     echo $room_type->rooms;
         // }
-        return view('home', ['room_types'=>$room_types]);
+        return view('home', ['room_types'=>$room_types->load('images')]);
         
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Customer;
 use JWTFactory;
 use JWTAuth;
@@ -56,9 +57,15 @@ class SignupController extends Controller
             empty($password)
             ) {
 
-                return response()->json(["msg"=>"$firstName $lastName $email $phone $password"], 400);
+                return response()->json(["data"=>"$firstName $lastName $email $phone $password", "msg"=>"Incomplete details"], 400);
             }
 
+            $customer = Customer::where('email', $email)->first();
+            
+            if (isset($customer)) {
+                return response()->json(['data'=>'exists', 'msg'=>'Email already exists'], 400);
+            }
+            
             $customer = new Customer();
             $customer->first_name = $firstName;
             $customer->last_name = $lastName;
@@ -67,12 +74,20 @@ class SignupController extends Controller
             $customer->password = Hash::make($password);
             $customer->save();
 
-            $payload = JWTFactory::make(["email"=>$customer->email, "password"=>$customer->password]);
-    
-
-            $token = JWTAuth::fromUser($payload);
+            $credentials = $request->only('email', 'password');
+            if ($token = $this->guard()->attempt($credentials)) {
+                return $this->respondWithToken($token);
+            }
+            return response()->json(['data' => 'unauthorized', 'msg'=>'Invalid login details'], 401);
             
-            return ["customer"=>$customer, "token"=>$token];
+            // $credentials = $request->only('email', 'password');
+            // if (! $token = auth('api')->attempt($credentials)) {
+            //     return response()->json(['error' => 'Unauthorized'], 401);
+            // }
+    
+            // return $this->respondWithToken($token);
+            
+            // return ["customer"=>$customer, "token"=>$token];
     }
 
     /**
@@ -118,5 +133,88 @@ class SignupController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function login(Request $request)
+    {
+        $firstName = $request->firstName;
+        $lastName = $request->lastName;
+        $email = $request->email;
+        $phone = $request->phone;
+        $password = $request->password;
+
+        $customer = new Customer();
+        $customer->first_name = $firstName;
+        $customer->last_name = $lastName;
+        $customer->email = $email;
+        $customer->phone = $phone;
+        $customer->password = Hash::make($password);
+        $customer->save();
+
+        $credentials = $request->only('email', 'password');
+        if ($token = $this->guard()->attempt($credentials)) {
+            return $this->respondWithToken($token);
+        }
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
+    /**
+     * Get the authenticated User
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        return response()->json($this->guard()->user());
+    }
+
+    /**
+     * Log the user out (Invalidate the token)
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        $this->guard()->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        return $this->respondWithToken($this->guard()->refresh());
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'customer' => $this->guard()->user(),
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
+        ]);
+    }
+
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
+     */
+    public function guard()
+    {
+        return Auth::guard('api');
     }
 }

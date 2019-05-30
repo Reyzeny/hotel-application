@@ -3,23 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Room;
-use App\Booking;
-use App\BookingRoom;
+use Illuminate\Support\Facades\Auth;
 
-class ReservationController extends Controller
+class LoginController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         //
-        //echo "hello there";
-        
-        
     }
 
     /**
@@ -41,26 +36,11 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         //
-        
-        $room_type_id = $request->room_type_id;
-        $room = Room::where([
-                ['room_type_id', $room_type_id],
-                ['available', true]
-            ])->inRandomOrder()->first();
-        $room->available = false;
-        $room->save();
-
-        $booking = new Booking();
-        $booking->customer_id = $request->customer_id;
-        $booking->room_number = $room->number;
-        $booking->noOfRooms = $request->noOfRooms;
-        $booking->noOfPersons = $request->noOfPersons;
-        $booking->amount = $request->price;
-        $booking->transactionRef = $request->transactionRef;
-
-        $booking->save();
-        return $room;
-
+        $credentials = $request->only('email', 'password');
+        if ($token = $this->guard()->attempt($credentials)) {
+            return $this->respondWithToken($token);
+        }
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     /**
@@ -106,17 +86,30 @@ class ReservationController extends Controller
     public function destroy($id)
     {
         //
-        //echo "id is $id";
-        $booking = Booking::find($id);
-        $booking->checked_out = true;
-        $booking->save();
+    }
 
-        $booking_rooms = BookingRoom::where('booking_id', $booking->id)->get();
-        foreach($booking_rooms as $booked_room) {
-            $room = Room::where('number', $booked_room->room_number)->first();
-            $room->available = true;
-            $room->save();
-        }
-        return redirect()->back();
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'customer' => $this->guard()->user(),
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
+        ]);
+    }
+
+
+    public function me()
+    {
+        return response()->json($this->guard()->user());
+    }
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
+     */
+    public function guard()
+    {
+        return Auth::guard('api');
     }
 }

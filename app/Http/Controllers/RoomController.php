@@ -39,6 +39,7 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         //
+        
         Room::create($request->all());
         return redirect()->back();
     }

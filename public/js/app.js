@@ -1902,7 +1902,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
     loggedIn: function loggedIn() {
-      return localStorage.getItem('authToken') != null;
+      return localStorage.getItem('token') != null;
     }
   },
   data: function data() {
@@ -1933,10 +1933,17 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1955,14 +1962,47 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('payment', ['ASYNC_SHOW_PAYMENT']), {
+  data: function data() {
+    return {
+      email: '',
+      password: '',
+      showLoading: false
+    };
+  },
+  methods: {
     login: function login() {
-      this.ASYNC_SHOW_PAYMENT({
-        showPayment: true
+      var _this = this;
+
+      this.$validator.validate().then(function (valid) {
+        if (!valid) {
+          return;
+        }
+
+        _this.showLoading = true;
+
+        _this.axios.post('/api/login', {
+          email: _this.email,
+          password: _this.password
+        }).then(function (response) {
+          console.log(response);
+          _this.showLoading = false;
+
+          if (response.status == 200) {
+            localStorage.setItem("token", response.data.access_token);
+            localStorage.setItem("customerID", response.data.customer.id);
+            localStorage.setItem("first_name", response.data.customer.first_name);
+            localStorage.setItem("last_name", response.data.customer.last_name);
+
+            _this.$router.go(-1);
+
+            return;
+          }
+        })["catch"](function (error) {
+          console.log("error is ", error);
+        });
       });
-      this.$router.go(-1);
     }
-  })
+  }
 });
 
 /***/ }),
@@ -2246,6 +2286,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2253,6 +2294,7 @@ __webpack_require__.r(__webpack_exports__);
       firstName: '',
       lastName: '',
       email: '',
+      phone: '',
       password: '',
       confirmPassword: '',
       showLoading: false
@@ -2273,10 +2315,24 @@ __webpack_require__.r(__webpack_exports__);
           firstName: _this.firstName,
           lastName: _this.lastName,
           email: _this.email,
+          phone: _this.phone,
           password: _this.password
         }).then(function (response) {
-          console.log(response);
+          console.log("data is ", response.data);
           _this.showLoading = false;
+
+          if (response.status == 200) {
+            localStorage.setItem("token", response.data.access_token);
+            localStorage.setItem("customerID", response.data.customer.id);
+            localStorage.setItem("first_name", response.data.customer.first_name);
+            localStorage.setItem("last_name", response.data.customer.last_name);
+
+            _this.$router.go(-1);
+
+            return;
+          }
+        })["catch"](function (error) {
+          console.log("error is ", error);
         });
       });
     }
@@ -35493,7 +35549,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nform {\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n.center-form {\n    margin-top: 50px;\n}\n.register {\n    margin-top: 30px;\n}\n.error {\n    color: red;\n}\n", ""]);
 
 // exports
 
@@ -79397,37 +79453,55 @@ var render = function() {
             },
             [
               _c("ul", { staticClass: "navbar-nav ml-auto" }, [
-                _c(
-                  "li",
-                  { staticClass: "nav-item" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link nav-text-color",
-                        attrs: { to: "/useraccount" }
-                      },
-                      [_vm._v("Account")]
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  { staticClass: "nav-item" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link nav-text-color",
-                        attrs: { to: "/bookings" }
-                      },
-                      [_vm._v("Bookings")]
-                    )
-                  ],
-                  1
-                )
+                _c("li", { staticClass: "nav-item-dropdown" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link dropdown-toggle nav-text-color",
+                      attrs: {
+                        href: "#",
+                        id: "navbarDropdown",
+                        role: "button",
+                        "data-toggle": "dropdown",
+                        "aria-haspopup": "true",
+                        "aria-expanded": "false"
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                        Account\n                    "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "dropdown-menu",
+                      attrs: { "aria-labelledby": "navbarDropdown" }
+                    },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "dropdown-item",
+                          attrs: { to: "/useraccount", href: "#" }
+                        },
+                        [_vm._v("Bookings")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "dropdown-item",
+                          attrs: { to: "/logout", href: "#" }
+                        },
+                        [_vm._v("Logout")]
+                      )
+                    ],
+                    1
+                  )
+                ])
               ])
             ]
           )
@@ -79466,22 +79540,6 @@ var render = function() {
                         attrs: { to: "/usersignup" }
                       },
                       [_vm._v("Signup")]
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  { staticClass: "nav-item" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link nav-text-color",
-                        attrs: { to: "/bookings" }
-                      },
-                      [_vm._v("Bookings")]
                     )
                   ],
                   1
@@ -79561,43 +79619,115 @@ var render = function() {
     "b-container",
     [
       _c(
-        "b-form",
+        "b-row",
+        { staticClass: "center-form" },
         [
-          _c("b-col", { attrs: { md: "2" } }),
+          _c("b-col", { attrs: { md: "3" } }),
           _vm._v(" "),
           _c(
             "b-col",
-            { attrs: { md: "8" } },
+            { attrs: { md: "6" } },
             [
-              _c("h2", [_vm._v("HOTEL")]),
-              _vm._v(" "),
-              _c("h4", [_vm._v("Sign In")]),
-              _vm._v(" "),
-              _c("b-form-input", {
-                attrs: { type: "text", placeholder: "Email", name: "email" }
-              }),
-              _vm._v(" "),
-              _c("b-form-input", {
-                attrs: { type: "text", placeholder: "Password", name: "email" }
-              }),
-              _vm._v(" "),
               _c(
-                "b-button",
-                {
-                  attrs: { block: "", variant: "primary" },
-                  on: {
-                    click: function($event) {
-                      return _vm.login()
-                    }
-                  }
-                },
-                [_vm._v("Login")]
+                "b-card",
+                { attrs: { title: "COWU CROWN HOTEL" } },
+                [
+                  _c(
+                    "b-form",
+                    [
+                      _c("h4", { staticClass: "register" }, [_vm._v("Login")]),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("b-form-input", {
+                        directives: [
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required|email",
+                            expression: "'required|email'"
+                          }
+                        ],
+                        attrs: {
+                          type: "text",
+                          placeholder: "Email",
+                          name: "email"
+                        },
+                        model: {
+                          value: _vm.email,
+                          callback: function($$v) {
+                            _vm.email = $$v
+                          },
+                          expression: "email"
+                        }
+                      }),
+                      _c("span", { staticClass: "error" }, [
+                        _vm._v(_vm._s(_vm.errors.first("email")))
+                      ]),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("b-form-input", {
+                        directives: [
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required|min:6",
+                            expression: "'required|min:6'"
+                          }
+                        ],
+                        attrs: {
+                          type: "password",
+                          placeholder: "Password",
+                          name: "password",
+                          "data-vv-as": "Password"
+                        },
+                        model: {
+                          value: _vm.password,
+                          callback: function($$v) {
+                            _vm.password = $$v
+                          },
+                          expression: "password"
+                        }
+                      }),
+                      _c("span", { staticClass: "error" }, [
+                        _vm._v(_vm._s(_vm.errors.first("password")))
+                      ]),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c(
+                        "b-button",
+                        {
+                          attrs: { block: "", variant: "primary" },
+                          on: {
+                            click: function($event) {
+                              return _vm.login()
+                            }
+                          }
+                        },
+                        [
+                          _vm.showLoading
+                            ? _c("b-spinner", { attrs: { small: "" } })
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "sr-only" }, [
+                            _vm._v("Loading...")
+                          ]),
+                          _vm._v(
+                            "\n                        Login\n                    "
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
               )
             ],
             1
           ),
           _vm._v(" "),
-          _c("b-col", { attrs: { md: "2" } })
+          _c("b-col", { attrs: { md: "3" } })
         ],
         1
       )
@@ -79990,6 +80120,33 @@ var render = function() {
                       }),
                       _c("span", { staticClass: "error" }, [
                         _vm._v(_vm._s(_vm.errors.first("email")))
+                      ]),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("b-form-input", {
+                        directives: [
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required",
+                            expression: "'required'"
+                          }
+                        ],
+                        attrs: {
+                          type: "text",
+                          placeholder: "Phone number",
+                          name: "phone"
+                        },
+                        model: {
+                          value: _vm.phone,
+                          callback: function($$v) {
+                            _vm.phone = $$v
+                          },
+                          expression: "phone"
+                        }
+                      }),
+                      _c("span", { staticClass: "error" }, [
+                        _vm._v(_vm._s(_vm.errors.first("phone")))
                       ]),
                       _c("br"),
                       _vm._v(" "),

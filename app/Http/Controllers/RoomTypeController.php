@@ -38,7 +38,7 @@ class RoomTypeController extends Controller
     {
         //
         $this->validate($request, [
-
+            'name' => 'required',
             'filename' => 'required',
             'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
 
@@ -91,6 +91,8 @@ class RoomTypeController extends Controller
     public function edit($id)
     {
         //
+        $room_type = RoomType::find($id);
+        return view('edit_room_type_info', ['room_type'=>$room_type, 'id'=>$id]);
     }
 
     /**
@@ -103,6 +105,13 @@ class RoomTypeController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $room_type = RoomType::find($id);
+        $room_type->name = $request->name;
+        $room_type->price = $request->price;
+        $room_type->features = $request->features;
+
+        $room_type->save();
+        return redirect('/admin');
     }
 
     /**

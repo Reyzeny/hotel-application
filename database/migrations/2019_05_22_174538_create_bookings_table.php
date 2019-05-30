@@ -16,11 +16,14 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('customer_id');
-            $table->integer('room_number');
-            $table->integer('noOfRooms');
-            $table->integer('noOfPersons');
+            $table->integer('room_type_id');
+            $table->integer('no_of_rooms');
+            $table->integer('no_of_persons');
             $table->double('amount');
-            $table->string('transactionRef');
+            $table->string('transaction_ref');
+            $table->date('check_in_date');
+            $table->date('check_out_date');
+            $table->boolean('checked_out')->default(false);
             $table->timestamps();
         });
     }

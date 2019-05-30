@@ -12,11 +12,14 @@
 
         <div v-if="loggedIn" class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <router-link class="nav-link nav-text-color" to="/useraccount">Account</router-link>
-                </li>
-                <li class="nav-item">
-                    <router-link class="nav-link nav-text-color" to="/bookings">Bookings</router-link>
+                <li class="nav-item-dropdown">
+                    <a class="nav-link dropdown-toggle nav-text-color" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Account
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <router-link to="/useraccount" class="dropdown-item" href="#">Bookings</router-link>
+                        <router-link to="/logout" class="dropdown-item" href="#">Logout</router-link>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -29,9 +32,6 @@
                 <li class="nav-item">
                     <router-link class="nav-link nav-text-color" to="/usersignup">Signup</router-link>
                 </li>
-                <li class="nav-item">
-                    <router-link class="nav-link nav-text-color" to="/bookings">Bookings</router-link>
-                </li>
             </ul>
         </div>
     </nav>
@@ -42,7 +42,7 @@
 export default {
     computed: {
         loggedIn() {
-            return localStorage.getItem('authToken')!=null
+            return localStorage.getItem('token')!=null
         }
     },
     data () {
