@@ -4,7 +4,7 @@
         <section class="container">
             <div class="row">
                 <div class="header">   <!-- vue typer-->
-                    <vue-typer :text='["Welcome to Rakitich Hotel!", "Our goal is to serve you better!"]'></vue-typer>
+                    <vue-typer :text='["Welcome to Owu Crown Hotel!", "Our goal is to serve you better!"]'></vue-typer>
                 </div>
             </div>
             <div class="row">
