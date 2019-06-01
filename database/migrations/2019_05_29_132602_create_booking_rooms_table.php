@@ -16,7 +16,7 @@ class CreateBookingRoomsTable extends Migration
         Schema::create('booking_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('booking_id');
-            $table->string('room_number')->unique();
+            $table->string('room_number');
             $table->timestamps();
         });
     }

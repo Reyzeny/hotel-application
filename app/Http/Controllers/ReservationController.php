@@ -116,6 +116,10 @@ class ReservationController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $room = Room::find($id);
+        $room->available = !$room->available;
+        $room->save();
+        return redirect()->back();
     }
 
     /**
@@ -157,4 +161,41 @@ class ReservationController extends Controller
         ])->get()->load('room_type')->load('customer');
         return $pastbookings;
     }
+
+    public function check_in(Request $request, $booking_id) {
+        $booking = Booking::find($booking_id);
+        $booking->checked_in = true;
+        $booking->save();
+        return redirect()->back();
+    }
+    public function check_out(Request $request, $booking_id) {
+        $booking = Booking::find($booking_id);
+        $booking->checked_out = true;
+        $booking->save();
+
+        $booking_rooms = BookingRoom::where('booking_id', $booking->id)->get();
+        foreach($booking_rooms as $booking_room) {
+            $room = Room::where('number', $booking_room->room_number)->first();
+            $room->available = true;
+            $room->save();
+        }
+        return redirect()->back();
+        return redirect()->back();
+    }
+
+    public function cancel_booking(Request $request, $booking_id) {
+        $booking = Booking::find($booking_id);
+        $booking->checked_in = true;
+        $booking->checked_out = true;
+        $booking->save();
+
+        $booking_rooms = BookingRoom::where('booking_id', $booking->id)->get();
+        foreach($booking_rooms as $booking_room) {
+            $room = Room::where('number', $booking_room->room_number)->first();
+            $room->available = true;
+            $room->save();
+        }
+        return redirect()->back();
+    }
+    
 }

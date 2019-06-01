@@ -8,7 +8,7 @@
         <b-row  style="margin-top: 50px;">
             <h2>Recent Bookings</h2>
         </b-row>
-        <b-row>
+        <b-row v-if="recent_bookings.length>0">
             <b-col sm="2">
                 Booking ID
             </b-col>
@@ -24,6 +24,9 @@
             <b-col sm="2">
                
             </b-col>
+        </b-row>
+        <b-row v-else>
+            <p class="text-center" style="font-size: 14px;">You have no recent bookings</p>
         </b-row>
         <b-row>
             <b-card v-for="recent in recent_bookings" :key="recent.id" style="margin-top: 20px; width: 100%;">
@@ -47,7 +50,7 @@
                 <receipt-component 
                 class="receipt"
                 :id="`receipt${recent.id}`" 
-                :bookingID="`${recent.id}`"
+                :bookingID="`${getIdFormatted(recent.id)}`"
                 :first_name="`${recent.customer.first_name}`"
                 :last_name="`${recent.customer.last_name}`"
                 :room_type="`${recent.room_type.name}`"
@@ -61,7 +64,7 @@
         <b-row style="margin-top: 100px;">
             <h2>Past bookings</h2>
         </b-row>
-        <b-row>
+        <b-row  v-if="past_bookings.length>0">
             <b-col sm="2">
                 Booking ID
             </b-col>
@@ -77,6 +80,9 @@
             <b-col sm="2">
                
             </b-col>
+        </b-row>
+        <b-row v-else>
+            <p class="text-center" style="font-size: 14px;">You have no past bookings</p>
         </b-row>
         <b-row>
             <b-card v-for="past in past_bookings" :key="past.id" style="margin-top: 10px; width: 100%;  margin-bottom: 10px;">

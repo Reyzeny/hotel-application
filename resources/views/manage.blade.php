@@ -15,18 +15,18 @@
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                        
                         @foreach($dueList as $due)
                         <div class="card">
-                            <p>{{$due->id}}</p>
-                            <h4>
+                            <div><span class="info-title">Room number:</span> 
+                            <span class="info-value">
                             @foreach($due->rooms as $room)
                                 {{$room->room_number}}
-
                             @endforeach
-                            </h4>
-                            <h4>{{$due->room_type->name}}</h4>
-                            <h3>{{$due->customer->first_name}} {{$due->customer->first_name}}</h3>
+                            </span>
+                            </div>
+                            <div><span class="info-title">Type: </span> <span class="info-value">{{$due->room_type->name}}</span></div>
+                            <div><span class="info-title">Name: </span> <span class="info-value">{{$due->customer->first_name}} {{$due->customer->first_name}}</span></div>
+                            <div><span class="info-title">Booking ID: </span> <span class="info-value">{{$due->id}}</span></div>
                             <form action="/reservation/{{$due->id}}" method="POST">
                                 @csrf
                                 @method('DELETE')
@@ -38,34 +38,63 @@
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                         @foreach($bookedList as $booked)
                         <div class="card">
-                            <p>{{$due->id}}</p>
-                            <h4>
-                            @foreach($due->rooms as $room)
+                            
+                            <div><span class="info-title">Room number:</span> 
+                            <span class="info-value">
+                            @foreach($booked->rooms as $room)
                                 {{$room->room_number}}
-
                             @endforeach
-                            </h4>
-                            <h4>{{$due->room_type->name}}</h4>
-                            <h3>{{$due->customer->first_name}} {{$due->customer->first_name}}</h3>
-                            <form action="/reservation/{{$due->id}}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-info">Cancel Booking</a>
-                            </form>
+                            </span>
+                            </div><br>
+                            <div><span class="info-title">Type: </span> <span class="info-value">{{$booked->room_type->name}}</span></div><br>
+                            <div><span class="info-title">Name: </span> <span class="info-value">{{$booked->customer->first_name}} {{$booked->customer->first_name}}</span></div><br>
+                            <div><span class="info-title">Booking ID: </span> <span class="info-value">{{$booked->id}}</span></div><br>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    @if (!$booked->checked_in)
+                                    <form action="/booking/check_in/{{$booked->id}}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-info btn-lg">Check in</a>
+                                    </form>
+                                    @else
+                                    <form action="/booking/check_out/{{$booked->id}}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-info btn-lg">Check out</a>
+                                    </form>
+                                    @endif
+                                </div>
+                                <div class="col-sm-6">
+                                    @if (!$booked->checked_in)
+                                    <form action="/booking/cancel/{{$booked->id}}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-info btn-lg">Cancel Booking</a>
+                                    </form>
+                                    @endif
+                                </div>
+                            </div>
+                            
+                            
+
+                            
                         </div>
                         @endforeach
                     </div>
                     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                         @foreach($availableList as $available)
                         <div class="card">
-
-                            <h4>{{$available->room_type->name}}</h4>
-                           
-                            <form action="/reservation/{{$due->id}}" method="POST">
+                            <div><span class="info-title" style="font-size: 20px;">Room number: </span> <span class="info-value"  style="font-size: 20px;">{{$available->number}}</span></div><br>
+                            <div><span class="info-title">Type: </span> <span class="info-value">{{$available->room_type->name}}</span></div><br>
+                            
+                            <form action="/reservation/{{$available->id}}" method="POST">
                                 @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-info">Cancel Booking</a>
+                                @method('PUT')
+                                @if($available->available)
+                                <button type="submit" class="btn btn-danger">Make unavailable</a>
+                                @else
+                                <button type="submit" class="btn btn-info">Make available</a>
+                                @endif
                             </form>
+                            
                         </div>
                         @endforeach
                     </div>
@@ -163,5 +192,11 @@
 .card .card-action {
   border-top: 1px solid rgba(160, 160, 160, 0.2);
   padding: 16px;
+}
+.info-title {
+    font-weight: 500;
+}
+.info-value {
+    color: #81C784;
 }
 </style>

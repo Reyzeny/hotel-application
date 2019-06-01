@@ -22,6 +22,7 @@
                         <label for="check-out-date">Check out date</label>
                         <b-form-input v-model="checkOutDate" name="check-out-date" :id="`type-${type}`" :type="'date'"></b-form-input>
                     </b-col>
+                    <p v-if="showDateError" style="color: red;">Your checkout date is behind</p>
                 </b-row ><br>
                 <b-row>
                     <b-col lg="4">
@@ -69,7 +70,8 @@ export default {
             image_url: '',
             room_name: '',
             price: 0,
-            type: 'date'
+            type: 'date',
+            showDateError: false,
         }
     },
     methods: {
@@ -83,8 +85,20 @@ export default {
         },
 
         book() {
+            //console.log("check in is ", this.checkInDate, " and type is ", typeof(this.checkInDate))
+            //console.log("check in is ", this.checkOutDate, " and type is ", typeof(this.checkOutDate))
+            
+            //return;
+            this.showDateError = false;
+            if (moment(this.checkOutDate,"YYYY-MM-DD").diff(moment(this.checkInDate,"YYYY-MM-DD")) <= 0) {
+                console.log("negative");
+                this.showDateError = true;
+                return;
+            }
+            
             if (localStorage.getItem('token')) {
                 let totalToPay = this.price * this.noOfRooms;
+                
                 this.showPaystack(totalToPay);
                 return
             }
@@ -127,8 +141,8 @@ export default {
                         no_of_persons: vinst.noOfPersons,
                         amount: totalToPay,
                         transaction_ref: response.reference,
-                        check_in_date: vinst.finalCheckInDate,
-                        check_out_date: vinst.finalCheckOutDate,
+                        check_in_date: vinst.checkInDate,
+                        check_out_date: vinst.checkOutDate,
                     })
                     .then(response=>{
                         console.log("response is ", response);

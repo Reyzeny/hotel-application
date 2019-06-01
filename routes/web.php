@@ -25,4 +25,7 @@ Route::resource('/room', 'RoomController');
 Route::get('/admin', 'HomeController@index')->name('admin');
 Route::get('/manage', 'ManageController@index')->name('manage');
 Route::resource('/reservation', 'ReservationController');
+Route::post('/booking/check_in/{booking_id}', 'ReservationController@check_in');
+Route::post('/booking/check_out/{booking_id}', 'ReservationController@check_out');
+Route::post('/booking/cancel/{booking_id}', 'ReservationController@cancel_booking');
 Auth::routes();

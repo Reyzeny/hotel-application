@@ -29,13 +29,24 @@ class ManageController extends Controller
     {
         //
         //$dueList = Booking::where('created_at', '<=', Carbon::today())->get()->load('customer')->load('rooms');
-        $dueList = Booking::whereDate('created_at', '<=', Carbon::today()->toDateString())
+        $dueList = Booking::whereDate('check_out_date', '<=', Carbon::today()->toDateString())
                     ->where('checked_out', false)
                     ->get()
                     ->load('customer', 'rooms', 'room_type');
-        $bookedList = Booking::where('checked_out', false)->get()->load('customer', 'rooms', 'room_type');
-        $availableList = Room::where('available', true)->get()->load('room_type');
-        //echo $bookedList;
+        // return $dueList;
+        $bookedList = Booking::where([
+                ['checked_in', false],
+                ['checked_out', false],
+                ['check_out_date', '>', Carbon::today()->toDateString()]
+            ])
+            ->orWhere([
+                ['checked_in', true],
+                ['checked_out', false],
+                ['check_out_date', '>', Carbon::today()->toDateString()]
+            ])
+            ->get()->load('customer', 'rooms', 'room_type');
+        $availableList = Room::orderBy('number')->get()->load('room_type');
+        // return $availableList;
         return view('manage', ['dueList'=>$dueList, 'bookedList'=>$bookedList, 'availableList'=>$availableList]);
     }
 

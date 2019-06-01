@@ -241,7 +241,7 @@
 }
 
 .room-image {
-    width: 100%;
+    width: 80%;
     height: 50%;
 }
 .hide {

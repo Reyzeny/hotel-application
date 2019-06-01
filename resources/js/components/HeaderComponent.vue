@@ -1,9 +1,9 @@
 <template>
 <div>
     <nav class="navbar navbar-expand-lg navbar-light header">
-        <a class="navbar-brand" href="#">
-            <img src="/images/hotel-logo.png" width="30" height="30" alt="Owu Crown Hotel" class="nav-text-color">
-        </a>
+        <router-link class="navbar-brand" to="/">
+            <img src="/images/hotel-logo.png" alt="Owu Crown Hotel" class="nav-text-color">
+        </router-link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon">
                 <img src="/images/menu.svg" width="30" height="30"/>
@@ -17,7 +17,7 @@
                         Account
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <router-link to="/useraccount" class="dropdown-item" href="#">Bookings</router-link>
+                        <router-link to="/useraccount" class="dropdown-item" href="#">Profile</router-link>
                         <b-button @click="logout()" class="dropdown-item">Logout</b-button>
                     </div>
                 </li>
@@ -74,7 +74,7 @@ export default {
     font-family: serif;
 }
 .nav-text-color {
-    color: greenyellow !important;
+    color: #81C784 !important;
 }
 .header-body {
     position: absolute;
